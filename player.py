@@ -169,11 +169,13 @@ class PLAYER2:
 
     # 自动按照一定的规律随机矩形转动
     def auto_update_dir(self):
-        # 如果x太大或者太小就随机选择左右方向移动
+        # 如果x太大或者太小就随机选择左右方向移动，并重置y
         if (self.x > WINDOW_WIDTH - 100) and self.dir in ['left', 'right']:
             self.dir = 'left'
+            self.y = random.randint(50, 550)
         if self.x < 100:
             self.dir = 'right'
+            self.y = random.randint(50, 550)
 
     # 每当敌人出现在视野圈内时自动发弹，无限弹药
     def auto_attack_enemy(self, dis_air):
