@@ -29,8 +29,14 @@ player1Img_dict = {
 class PLAYER1:
     def __init__(self):
         self.color = 'red'
-        self.x = PLAYER1_INIT_X
-        self.y = PLAYER1_INIT_Y
+        self.reset_()
+        # 添加情报系统，包含视野，可打击目标，敌方子弹的位置
+        # 初步设计只有在视野范围内的武器才可被打击，先不加入攻击范围
+        self.obs = {}
+
+    def reset_(self):
+        self.x = random.randint(50, 150)
+        self.y = random.randint(100, 500)
         self.air_speed = PLAYER1_AIR_SPEED
         self.dir = PLAYER1_DIR
         self.bullet_num = PLAYER1_BULLET_NUM
@@ -38,10 +44,6 @@ class PLAYER1:
         self.view_space = PLAYER1_VIEW_SPACE
         self.view_color = PLAYER1_VIEW_COLOR
         self.attack_distance = PLAYER1_ATTACK_DISTANCE
-
-        # 添加情报系统，包含视野，可打击目标，敌方子弹的位置
-        # 初步设计只有在视野范围内的武器才可被打击，先不加入攻击范围
-        self.obs = {}
 
     # 根据dir自动加载当前方向的飞机图片
     def get_now_dir_air_pic(self):
@@ -104,14 +106,20 @@ player2Img_dict = {
 class PLAYER2:
     def __init__(self):
         self.color = 'blue'
-        self.x = PLAYER2_INIT_X
-        self.y = PLAYER2_INIT_Y
+        self.reset_()
+
+    # 初始化玩家的位置
+    def reset_(self):
+        self.x = WINDOW_WIDTH - random.randint(50, 150)
+        self.y = random.randint(100, 500)
         self.air_speed = PLAYER2_AIR_SPEED
         self.dir = PLAYER2_DIR
         self.bullet_num = PLAYER2_BULLET_NUM
         self.view_space = PLAYER2_VIEW_SPACE
         self.view_color = PLAYER2_VIEW_COLOR
         self.attack_distance = PLAYER2_ATTACK_DISTANCE
+        # 防止瞬间发弹过多
+        self.auto_attack_times = 0
 
     # 根据dir自动加载当前方向的飞机图片
     def get_now_dir_air_pic(self):
@@ -157,4 +165,25 @@ class PLAYER2:
                 return None
         else:
             print('距离太远')
+            return None
+
+    # 自动按照一定的规律随机矩形转动
+    def auto_update_dir(self):
+        # 如果x太大或者太小就随机选择左右方向移动
+        if (self.x > WINDOW_WIDTH - 100) and self.dir in ['left', 'right']:
+            self.dir = 'left'
+        if self.x < 100:
+            self.dir = 'right'
+
+    # 每当敌人出现在视野圈内时自动发弹，无限弹药
+    def auto_attack_enemy(self, dis_air):
+        real_distance = calclate_distance([self.x + AIR_SIZE / 2, self.y + AIR_SIZE / 2],
+                                          [dis_air.x + AIR_SIZE / 2, dis_air.y + AIR_SIZE / 2])
+        if real_distance <= self.attack_distance and self.auto_attack_times == 0:
+            bullet = BULLET(self, dis_air)
+            self.auto_attack_times = 100
+            return bullet
+        else:
+            if self.auto_attack_times > 0:
+                self.auto_attack_times -= 1
             return None
