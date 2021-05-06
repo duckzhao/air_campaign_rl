@@ -1,3 +1,5 @@
+import random
+
 # 窗口大小
 WINDOW_WIDTH = 20*75
 WINDOW_HIGHT = 20*30
@@ -10,11 +12,11 @@ WINDOW_ROW = WINDOW_WIDTH/20
 WINDOW_COL = WINDOW_HIGHT/20
 
 # 飞机的初始位置
-PLAYER1_INIT_X = 100
-PLAYER1_INIT_Y = 250
+PLAYER1_INIT_X = random.randint(50, 150)
+PLAYER1_INIT_Y = random.randint(100, 200)
 
-PLAYER2_INIT_X = WINDOW_WIDTH - 100
-PLAYER2_INIT_Y = WINDOW_HIGHT - 250
+PLAYER2_INIT_X = WINDOW_WIDTH - random.randint(50, 150)
+PLAYER2_INIT_Y = random.randint(100, 200)
 
 # 游戏结束的状态,0表示游戏正常进行中
 RED_WIN = 1

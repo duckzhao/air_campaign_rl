@@ -82,6 +82,12 @@ def listen_key_input(pygame_event, palyer1, player2):
             if temp_bullet:
                 bullet_list.append(temp_bullet)
 
+
+# 对玩家输入事件的监听进行修改,将玩家2的游戏策略变为 以一定规律移动和发弹
+def listen_key_input_2():
+    pass
+
+
 if __name__ == '__main__':
     while True:
         # 游戏主循环
