@@ -103,10 +103,16 @@ class BULLET:
     def judge_hit_dis(self):
         distance = calclate_distance([self.x, self.y], [self.dis_air.x, self.dis_air.y+30])
         # 打击中了返回True
-        if distance <= HIT_LIMIT_DISTANCE:
-            return True
+        if self.ori_air.color == 'red':
+            if distance <= PLAYER1_HIT_LIMIT_DISTANCE:
+                return True
+            else:
+                return False
         else:
-            return False
+            if distance <= PLAYER2_HIT_LIMIT_DISTANCE:
+                return True
+            else:
+                return False
 
     # 计算子弹当前方向
     # def calc_bullet_dir(self):
