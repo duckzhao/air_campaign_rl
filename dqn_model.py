@@ -14,7 +14,8 @@ class DQN(object):
 
     def create_model(self):
         """创建一个隐藏层为100的神经网络"""
-        STATE_DIM, ACTION_DIM = 2, 3
+        global ACTION_DIM
+        STATE_DIM, ACTION_DIM = 8, 5
         model = models.Sequential([
             layers.Dense(100, input_dim=STATE_DIM, activation='relu'),
             layers.Dense(ACTION_DIM, activation="linear")
@@ -27,7 +28,8 @@ class DQN(object):
         """预测动作"""
         # 刚开始时，加一点随机成分，产生更多的状态
         if np.random.uniform() < epsilon - self.step * 0.0002:
-            return np.random.choice([0, 1, 2])
+            print('随机选择行为')
+            return np.random.choice(list(range(ACTION_DIM)))
         return np.argmax(self.model.predict(np.array([s]))[0])
 
     def save_model(self, file_path='MountainCar-v0-dqn.h5'):
@@ -35,12 +37,12 @@ class DQN(object):
         self.model.save(file_path)
 
     def remember(self, s, a, next_s, reward):
-        """历史记录，position >= 0.4时给额外的reward，快速收敛"""
-        if next_s[0] >= 0.4:
-            reward += 1
+        """提供专家知识，快速收敛"""
+        # if next_s[0] >= 500 and next_s[0] <= 1000 and next_s[1] >= 200 and next_s[1] <= 400:
+        #     reward += 0.05
         self.replay_queue.append((s, a, next_s, reward))
 
-    def train(self, batch_size=64, lr=1, factor=0.95):
+    def train(self, batch_size=64, lr=1e-3, factor=0.95):
         if len(self.replay_queue) < self.replay_size:
             return
         self.step += 1
