@@ -1,7 +1,10 @@
 import random
 
 # 游戏进行的轮次
-EPISODE = 50
+EPISODE = 10000
+
+# 游戏画面更新的频率，越大跑得越快
+FPS = 2000
 
 # 窗口大小
 WINDOW_WIDTH = 20*75
@@ -22,9 +25,15 @@ PLAYER2_INIT_X = WINDOW_WIDTH - random.randint(50, 150)
 PLAYER2_INIT_Y = random.randint(100, 200)
 
 # 游戏结束的状态,0表示游戏正常进行中
+NOTHING = 0  # 正常对局中
 RED_WIN = 1
 BLUE_WIN = 2
 NO_WIN = 3  # 平局
+
+# 游戏结束类型
+NOT_OVER = 0
+OUT_OF_MAP = 1
+ATTACKED = 2
 
 # 飞机的速度
 PLAYER1_AIR_SPEED = 0.5
@@ -34,7 +43,15 @@ PLAYER2_AIR_SPEED = 1
 PLAYER1_BULLET_SPEED = 2
 PLAYER2_BULLET_SPEED = 1.5
 
-# 飞机飞行的方向,right left up down
+# 飞机飞行方向字典,完成数字映射
+DIR_DICT = {
+    'up': 0,
+    'down': 1,
+    'left': 2,
+    'right': 3
+}
+
+# 飞机初始的方向,right left up down
 PLAYER1_DIR = 'right'
 PLAYER2_DIR = 'left'
 
@@ -61,3 +78,12 @@ PLAYER2_ATTACK_DISTANCE = 160
 # 飞机视野范围颜色
 PLAYER1_VIEW_COLOR = [255, 0, 0]    # red
 PLAYER2_VIEW_COLOR = [0, 0, 255]    # blue
+
+# 玩家1的行为字典
+PLAYER1_ACTION_DICT = {
+    0: 'up',
+    1: 'down',
+    2: 'left',
+    3: 'right',
+    4: 'attack'
+}
