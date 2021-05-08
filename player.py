@@ -30,9 +30,6 @@ class PLAYER1:
     def __init__(self):
         self.color = 'red'
         self.reset_()
-        # 添加情报系统，包含视野，可打击目标，敌方子弹的位置
-        # 初步设计只有在视野范围内的武器才可被打击，先不加入攻击范围
-        self.obs = {}
 
     def reset_(self):
         self.x = random.randint(50, 150)
@@ -91,6 +88,19 @@ class PLAYER1:
             print('距离太远')
             return None
 
+    # 添加情报系统，包含视野，可打击目标，敌方子弹的位置
+    # 初步设计只有在视野范围内的武器才可被打击，先不加入攻击范围
+    def get_obs(self, player2, bullet_list):
+        if bullet_list:
+            obs = [self.x, self.y, DIR_DICT[self.dir], self.bullet_num,
+                       player2.x, player2.y, DIR_DICT[player2.dir], DIR_DICT[bullet_list[-1].dir]]
+        else:
+            # 如果当前没有子弹就传入一个 -1 的子弹方向
+            obs = [self.x, self.y, DIR_DICT[self.dir], self.bullet_num,
+                       player2.x, player2.y, DIR_DICT[player2.dir], -1]
+        # print('当前的观测obs为：', obs)
+        return obs
+
 # 玩家2飞机图 up down right left
 player2Img_right = pygame.image.load('./images/蓝方轰炸机右飞.png')
 player2Img_left = pygame.image.load('./images/蓝方轰炸机左飞.png')
@@ -110,7 +120,7 @@ class PLAYER2:
 
     # 初始化玩家的位置
     def reset_(self):
-        self.x = WINDOW_WIDTH - random.randint(50, 150)
+        self.x = WINDOW_WIDTH - random.randint(100, 150)
         self.y = random.randint(100, 500)
         self.air_speed = PLAYER2_AIR_SPEED
         self.dir = PLAYER2_DIR
